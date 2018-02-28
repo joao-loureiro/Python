@@ -1,0 +1,68 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Wed Feb 28 09:44:24 2018
+
+@author: Joao.Loureiro
+"""
+#Importa OS
+import os
+
+#Define a lista total, a provisoria e as sublistas
+lista_completa = []
+lista_provisoria = []
+sublista_um = []
+sublista_dois = []
+sublista_tres = []
+
+#Define directoria
+directoria = 'C:/Users/Joao.Loureiro/Desktop/Cenas/'
+
+#Define a lista de ficheiros
+ficheiros = os.listdir(directoria)
+
+#Percorre os ficheiros
+for ficheiro in ficheiros:
+    #Cria um ficheiro activo de leitura
+    ficheiro_activo = open(directoria+ficheiro)
+    #Junta o primeiro elemento da lista provisoria
+    lista_provisoria.append(str(ficheiro))
+    #Cria uma lista com as linhas de cada ficheiro
+    linhas = ficheiro_activo.readlines()
+    #Percorre as linhas
+    for linha in linhas:
+        if 'DBPath=' in linha:
+            sublista_um.append(linha)
+            #print(sublista_um)
+        elif 'OrderGUID=' in linha:
+            sublista_dois.append(linha)
+            #print(sublista_dois)
+        elif (('obj' in linha.lower() and 'desc' not in linha.lower()) and (('.it0' in linha.lower()) or ('.it2' in linha.lower()) or ('.wi0' in linha.lower()) or ('.wi2' in linha.lower()) or ('.ri0' in linha.lower()) or ('.ri2' in linha.lower()) or ('.ci' in linha.lower()) or ('.ui' in linha.lower()))):
+            sublista_tres.append(linha)
+            #print(sublista_tres)
+    #Fecha o ficheiro activo de leitura
+    ficheiro_activo.close()
+    #Junta a sublista um à lista provisoria e apaga-a
+    lista_provisoria.append(sublista_um)
+    sublista_um = []
+    #Junta a sublista dois à lista provisoria e apaga-a
+    lista_provisoria.append(sublista_dois)
+    sublista_dois = []
+    #Junta a sublista tres à lista provisoria e apaga-a
+    lista_provisoria.append(sublista_tres)
+    sublista_tres = []
+    #Junta a lista provisoria à lista completa e apaga-a
+    lista_completa.append(lista_provisoria)
+    lista_provisoria = []
+
+#Abre um ficheiro de escrita
+ficheiro_de_escrita = open(directoria+'resultados.csv', '+w')
+
+#Itera pela lista completa
+for pedaco_de_lista in range(len(lista_completa)):
+    #Itera pelos atributos (porque supostamente são os mais numerosos)
+    for atributo in range(len(lista_completa[pedaco_de_lista][3])):
+        ficheiro_de_escrita.write(str(lista_completa[pedaco_de_lista][0]) + (',') + str(lista_completa[pedaco_de_lista][1]) + (',') + str(lista_completa[pedaco_de_lista][2]) + (',') + str(lista_completa[pedaco_de_lista][3][atributo]))
+
+ficheiro_de_escrita.close()
+
+    
