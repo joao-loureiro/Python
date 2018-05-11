@@ -1,2 +1,2 @@
-# Pythonsd
+# Python
 Python snippets
